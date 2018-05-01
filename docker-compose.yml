@@ -27,16 +27,4 @@ services:
     environment:
             MYSQL_ROOT_PASSWORD: Ausias123@@
     network_mode: "bridge"
-  jenkins:
-    container_name: jenkins
-    hostname: jenkins
-    image: ackstorm/debian-jenkins:2.46.2ack1
-    restart: always
-    volumes:
-      - /srv/jenkins/jenkins_home:/var/jenkins_home
-      - /etc/timezone:/etc/timezone
-      - /etc/localtime:/etc/localtime
-    ports:
-      - "81:8080"
-    network_mode: "bridge"
 
