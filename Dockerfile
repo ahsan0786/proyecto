@@ -72,7 +72,7 @@ RUN curl -o joomla.tar.bz2 -SL https://github.com/joomla/joomla-cms/releases/dow
 	&& chown -R www-data:www-data /usr/src/joomla
 
 # Copy init scripts and custom .htaccess
-COPY docker-entrypoint.sh /entrypoint.sh
+COPY docker-entrypoint1.sh /entrypoint.sh
 COPY makedb.php /makedb.php
 
 ENTRYPOINT ["/entrypoint.sh"]
