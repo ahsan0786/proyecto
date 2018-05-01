@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 FROM php:7.2-fpm-alpine
 LABEL maintainer="Ahsan Hussain <a14ahsiqbiqb@iam.cat>"
 
