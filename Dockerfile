@@ -76,7 +76,6 @@ COPY makedb.php /makedb.php
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["php-fpm"]
 
->>>>>>> 0a3a351dc5541a59933fdf0dd1e60806f5201108
 FROM debian:stretch-slim
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
