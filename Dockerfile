@@ -1,5 +1,5 @@
 FROM php:7.2-fpm-alpine
-LABEL maintainer="Michael Babker <michael.babker@joomla.org> (@mbabker)"
+LABEL maintainer="Ahsan Hussain <a14ahsiqbiqb@iam.cat>"
 
 # Disable remote database security requirements.
 ENV JOOMLA_INSTALLATION_DISABLE_LOCALHOST_CHECK=1
