@@ -7,11 +7,6 @@ pipeline {
         TEST_CONTAINER = "${env.TEST_PREFIX}-${env.BUILD_NUMBER}"
         REGISTRY_ADDRESS = "a14ahsiqbiqb@iam.cat"
 
-        #SLACK_CHANNEL = "#deployment-notifications"
-        #SLACK_TEAM_DOMAIN = "MY-SLACK-TEAM"
-        #SLACK_TOKEN = credentials("slack_token")
-        #DEPLOY_URL = "https://deployment.example.com/"
-
         COMPOSE_FILE = "docker-compose.yml"
         REGISTRY_AUTH = credentials("docker-registry")
         STACK_PREFIX = "proyecto"
@@ -116,27 +111,6 @@ pipeline {
                 sh "docker stack deploy ${env.DEPLOY_STACK_NAME} -c ${env.COMPOSE_FILE} --with-registry-auth"
             }
 
-           # post {
-            #    success {
-             #       slackSend (
-              #          teamDomain: "${env.SLACK_TEAM_DOMAIN}",
-               #         token: "${env.SLACK_TOKEN}",
-                 #       channel: "${env.SLACK_CHANNEL}",
-                  #      color: "good",
-                   #     message: "${env.STACK_PREFIX} production deploy: *${env.DEPLOY_VERSION}*. <${env.DEPLOY_URL}|Access service> - <${env.BUILD_URL}|Check build>"
-                   # )
-                #}
-
-                #failure {
-                 #   slackSend (
-                  #      teamDomain: "${env.SLACK_TEAM_DOMAIN}",
-                   #     token: "${env.SLACK_TOKEN}",
-                    #    channel: "${env.SLACK_CHANNEL}",
-                     #   color: "danger",
-                      #message: "${env.STACK_PREFIX} production deploy failed: *${env.DEPLOY_VERSION}*. <${env.BUILD_URL}|Check build>"
-                    #)
-               # }
-            #}
         }
     }
 
