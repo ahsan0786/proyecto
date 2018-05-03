@@ -1,3 +1,4 @@
+docker swarm init
 echo "IP jenkins master"
 read ipmaster
 echo "username jenkins master"
