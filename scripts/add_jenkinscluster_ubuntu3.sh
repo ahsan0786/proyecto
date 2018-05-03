@@ -1,3 +1,10 @@
+echo "IP jenkins master"
+read ipmaster
+echo "username jenkins master"
+read user
+echo "password jenkins master"
+read password
+echo "-master http://$ipmaster -password $password -username user"|docker secret create jenkins-v1 -
 docker service create \
     --mode=global \
     --name jenkins-swarm-agent \
