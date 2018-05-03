@@ -1,20 +1,10 @@
 #!/bin/bash
-sudo groupadd docker
-sudo usermod -aG docker $USER
-sudo systemctl enable docker
-sudo apt-get update
-sudo apt-get install \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    software-properties-common
+apt-get install curl
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo apt-key fingerprint 0EBFCD88
-sudo add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-   $(lsb_release -cs) \
-   stable"
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 sudo apt-get update
-sudo apt-get install docker-ce
-sudo dpkg -i /path/to/package.deb
+apt-cache policy docker-ce
+sudo apt-get install -y docker-ce
+sudo usermod -aG docker ${USER}
+su - ${USER}
 
