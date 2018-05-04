@@ -37,9 +37,9 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
 		//sh "proyecto_mysql=$(docker images | grep proyecto_mysql |awk '{print $3}')"
 		//sh "proyecto_joomla=$(docker images | grep proyecto_joomla |awk '{print $3}')"
 		sh "docker tag proyecto_mysql ahsan0786/proyecto_mysql"
-		sh "docker tag proyecto_joomla ahsan0786/proyecto_mysql"
+		sh "docker tag proyecto_joomla ahsan0786/proyecto_joomla"
 		sh "docker push ahsan0786/proyecto_mysql"
-		sh "docker push ahsan0786/proyecto_mysql"
+		sh "docker push ahsan0786/proyecto_joomla"
       }
     }
   }
@@ -79,6 +79,7 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
             docker network create --driver overlay --attachable proyecto
 			docker service create --replicas 3 --network proyecto --name proyecto_mysql -p 3307:3306 ahsan0786/proyecto_mysql
 			docker service create --replicas 3 --network proyecto --name proyecto_joomla -p 8080:80 ahsan0786/proyecto_joomla
+
           else
 			docker service update --image ahsan0786/proyecto_mysql proyecto_mysql
             docker service update --image ahsan0786/proyecto_joomla proyecto_joomla 
@@ -93,7 +94,9 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
             STATUS=$(docker service inspect --format '{{ .UpdateStatus.State }}' proyecto_mysql)
 			STATUS1=$(docker service inspect --format '{{ .UpdateStatus.State }}' proyecto_joomla)
             if [[ "$STATUS" != "updating" ]] && [[ "$STATUS1" != "updating" ]]; then
-				docker run --rm -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql/data -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql
+				//docker run --rm -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql/data -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql
+				//docker run --rm --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@  -d ahsan0786/proyecto_joomla
+				docker run --restart=always --name mysql -p 3307:3306 -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql/data -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql
 				docker run --rm --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@  -d ahsan0786/proyecto_joomla
 				break
             fi         
