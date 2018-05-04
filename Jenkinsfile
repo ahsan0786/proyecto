@@ -36,8 +36,8 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
       withDockerRegistry([credentialsId: 'DockerHub']) {
 		//sh "proyecto_mysql=$(docker images | grep proyecto_mysql |awk '{print $3}')"
 		//sh "proyecto_joomla=$(docker images | grep proyecto_joomla |awk '{print $3}')"
-		sh "docker tag $proyecto_mysql ahsan0786/proyecto_mysql"
-		sh "docker tag $proyecto_joomla ahsan0786/proyecto_mysql"
+		sh "docker tag proyecto_mysql ahsan0786/proyecto_mysql"
+		sh "docker tag proyecto_joomla ahsan0786/proyecto_mysql"
 		sh "docker push ahsan0786/proyecto_mysql"
 		sh "docker push ahsan0786/proyecto_mysql"
       }
