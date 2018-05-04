@@ -77,7 +77,7 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
           if [[ "$SERVICES" -eq 0 ]] && [[ "$SERVICES1" -eq 0 ]] ; then
 	        docker network rm proyecto || true
             docker network create --driver overlay --attachable proyecto
-			docker service create --replicas 3 --network proyecto --name proyecto_mysql -p 3307:3306  proyecto_mysql
+			docker service create --replicas 3 --network proyecto --name proyecto_mysql -p 3307:3306 ahsan0786/proyecto_mysql
 			docker service create --replicas 3 --network proyecto --name proyecto_joomla -p 8080:80 ahsan0786/proyecto_joomla
           else
 			docker service update --image ahsan0786/proyecto_mysql proyecto_mysql
