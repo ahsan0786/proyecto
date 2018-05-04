@@ -74,11 +74,10 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
         sh '''
           SERVICES=$(docker service ls --filter name=proyecto_mysql --quiet | wc -l)
 		  SERVICES1=$(docker service ls --filter name=proyecto_joomla --quiet | wc -l)
-          if [[ "$SERVICES" -eq 0 ]]; then
+          if [[ "$SERVICES" -eq 0 ]] && [[ "$SERVICES1" -eq 0 ]] ; then
 	        docker network rm proyecto || true
             docker network create --driver overlay --attachable proyecto
 			docker service create --replicas 3 --network proyecto --name proyecto_mysql -p 3307:3306 ahsan0786/proyecto_mysql
-		  elif [[ "$SERVICES1" -eq 0 ]]; then
 			docker service create --replicas 3 --network proyecto --name proyecto_joomla -p 8080:80 ahsan0786/proyecto_joomla
           else
 			docker service update --image ahsan0786/proyecto_mysql proyecto_mysql
@@ -92,15 +91,12 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
           for i in `seq 1 20`;
           do
             STATUS=$(docker service inspect --format '{{ .UpdateStatus.State }}' proyecto_mysql)
-            if [[ "$STATUS" != "updating" ]]; then
-				docker run --rm -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql/data -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql 
-              break
-            fi
-           STATUS1=$(docker service inspect --format '{{ .UpdateStatus.State }}' proyecto_joomla)
-            if [[ "$STATUS1" != "updating" ]]; then
+			STATUS1=$(docker service inspect --format '{{ .UpdateStatus.State }}' proyecto_joomla)
+            if [[ "$STATUS" != "updating" ]] && [[ "$STATUS1" != "updating" ]]; then
+				docker run --rm -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql/data -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql
 				docker run --rm --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@  -d ahsan0786/proyecto_joomla
-              break
-            fi
+				break
+            fi         
             sleep 10s
           done
           
