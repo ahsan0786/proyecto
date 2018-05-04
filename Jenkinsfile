@@ -80,8 +80,8 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
 			docker service create --replicas 3 --network proyecto --name proyecto_mysql -p 3307:3306 ahsan0786/proyecto_mysql
 			docker service create --replicas 3 --network proyecto --name proyecto_joomla -p 8080:80 ahsan0786/proyecto_joomla
           else
-			docker service update --image ahsan0786/proyecto_mysql proyecto_mysql
-            docker service update --image ahsan0786/proyecto_joomla proyecto_joomla 
+			docker service update --image ahsan0786/proyecto_mysql ahsan0786/proyecto_mysql
+            docker service update --image ahsan0786/proyecto_joomla ahsan0786/proyecto_joomla 
           fi
           '''
         // run some final tests in production
