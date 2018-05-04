@@ -74,11 +74,11 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
         sh '''
           SERVICES=$(docker service ls --filter name=proyecto_mysql --quiet | wc -l)
 		  SERVICES1=$(docker service ls --filter name=proyecto_joomla --quiet | wc -l)
-          if [[ "$SERVICES" -eq 0 ]] then
+          if [[ "$SERVICES" -eq 0 ]]; then
 	        docker network rm proyecto || true
             docker network create --driver overlay --attachable proyecto
 			docker service create --replicas 3 --network proyecto --name proyecto_mysql -p 3307:3306 ahsan0786/proyecto_mysql
-		  elif [[ "$SERVICES1" -eq 0 ]] then
+		  elif [[ "$SERVICES1" -eq 0 ]]; then
 			docker service create --replicas 3 --network proyecto --name proyecto_joomla -p 8080:80 ahsan0786/proyecto_joomla
           else
 			docker service update --image ahsan0786/proyecto_mysql proyecto_mysql
