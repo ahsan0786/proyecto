@@ -3,9 +3,9 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
   node("docker-test") {
     checkout scm
 
-    stage("Unit Test") {
-   !   sh "docker run --rm -v ${WORKSPACE}:proyecto -v --run Unit"
-    }
+ //   stage("Unit Test") {
+   //!   sh "docker run --rm -v ${WORKSPACE}:proyecto -v --run Unit"
+  //  }
     stage("Integration Test") {
       try {
         sh "docker build -t proyecto_mysql -f Dockerfile_mysql . "
