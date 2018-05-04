@@ -108,8 +108,6 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
         sh "docker service update --rollback  proyecto_mysql"
 		sh "docker service update --rollback  proyecto_joomla"
         error "Service update failed in production"
-      }finally {
-        sh "docker ps -aq | xargs docker rm || true"
       }
     }
   }
