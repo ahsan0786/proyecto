@@ -1,6 +1,7 @@
-echo "pega el comando docker swarm join...."
-read swarm
-bash -c "$swarm"
+#echo "pega el comando docker swarm join...."
+#read swarm
+#bash -c "$swarm"
+docker swarm init
 echo "IP jenkins master"
 read ipmaster
 echo "username jenkins master"
