@@ -12,12 +12,12 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
 		sh "docker build -t proyecto_joomla -f Dockerfile_joomla . "
 		sh "docker rm -f joomla || true"
         sh "docker rm -f mysql || true"
-        sh " docker run --restart=always --name mysql -p 3307:3306 -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql/data -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d proyecto_mysql "
+        sh " docker run --restart=always --name mysql -p 3307:3306 -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql/data -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql "
 		//sh " docker run --restart=always --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@ -d proyecto_joomla "
         // env variable is used to set the server where go test will connect to run the test
        // sh "docker run --rm -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql/data -e MYSQL_ROOT_PASSWORD=Ausias123@@ proyecto_mysql -v --run proyecto_mysql"
 		//sh " docker run --rm --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e /JOOMLA_DB_PASSWORD=Ausias123@@ --run proyecto_joomla "
-     sh "docker run --rm --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@  -d proyecto_joomla "
+     sh "docker run --rm --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@  -d ahsan0786/proyecto_joomla "
 		}
       catch(e) {
         error "Integration Test failed"
@@ -93,12 +93,12 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
           do
             STATUS=$(docker service inspect --format '{{ .UpdateStatus.State }}' proyecto_mysql)
             if [[ "$STATUS" != "updating" ]]; then
-				docker run --rm -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql/data -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d proyecto_mysql 
+				docker run --rm -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql/data -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql 
               break
             fi
            STATUS1=$(docker service inspect --format '{{ .UpdateStatus.State }}' proyecto_joomla)
             if [[ "$STATUS1" != "updating" ]]; then
-				docker run --rm --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@  -d proyecto_joomla
+				docker run --rm --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@  -d ahsan0786/proyecto_joomla
               break
             fi
             sleep 10s
