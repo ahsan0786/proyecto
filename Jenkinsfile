@@ -12,10 +12,10 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
 		sh "docker build -t proyecto_joomla -f Dockerfile_joomla . "
 		sh "docker rm -f joomla || true"
         sh "docker rm -f mysql || true"
-        sh " docker run --restart=always --name mysql -p 3307:3306 -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql/data -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql "
+        sh " docker run --restart=always --name mysql -p 3307:3306 -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql "
 		//sh " docker run --restart=always --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@ -d proyecto_joomla "
         // env variable is used to set the server where go test will connect to run the test
-       // sh "docker run --rm -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql/data -e MYSQL_ROOT_PASSWORD=Ausias123@@ proyecto_mysql -v --run proyecto_mysql"
+       // sh "docker run --rm -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Ausias123@@ proyecto_mysql -v --run proyecto_mysql"
 		//sh " docker run --rm --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e /JOOMLA_DB_PASSWORD=Ausias123@@ --run proyecto_joomla "
      sh "docker run --rm --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@  -d ahsan0786/proyecto_joomla "
 		}
@@ -51,9 +51,9 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
       try {
         sh "docker rm -f joomla || true"
         sh "docker rm -f mysql || true"
-        sh " docker run --restart=always --name mysql -p 3307:3306 -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql/data -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql "
+        sh " docker run --restart=always --name mysql -p 3307:3306 -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql "
 		//sh " docker run --restart=always --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_joomla "
-       // sh "docker run --rm -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql/data -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ ahsan0786/proyecto_mysql -v"
+       // sh "docker run --rm -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ ahsan0786/proyecto_mysql -v"
 		//sh "docker run --rm -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@ ahsan0786/proyecto_joomla -v"
 		sh "docker run --rm --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@  -d ahsan0786/proyecto_joomla "
       } catch(e) {
@@ -76,7 +76,7 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
           if [[ "$SERVICES" -eq 0 ]] && [[ "$SERVICES1" -eq 0 ]] ; then
 	        docker network rm proyecto || true
             docker network create --driver overlay --attachable proyecto
-			docker service create --replicas 1 --network proyecto --name proyecto_mysql -p 3307:3306 --mount type=bind,source=/home/ubuntu/docker/containers/mysql,destination=/var/lib/mysql/data -e MYSQL_ROOT_PASSWORD=Ausias123@@ 				ahsan0786/proyecto_mysql
+			docker service create --replicas 1 --network proyecto --name proyecto_mysql -p 3307:3306 --mount type=bind,source=/home/ubuntu/docker/containers/mysql,destination=/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Ausias123@@ 				ahsan0786/proyecto_mysql
 			docker service create --replicas 3 --network proyecto --name proyecto_joomla -p 8080:80 --mount type=bind,source=/home/ubuntu/docker/containers/joomla,destination=/var/www/html -e JOOMLA_DB_HOST=proyecto_mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@ ahsan0786/proyecto_joomla
 
           else
@@ -96,8 +96,9 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
 				#//docker run --rm -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql/data -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql
 				#//docker run --rm --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e #JOOMLA_DB_PASSWORD=Ausias123@@  -d ahsan0786/proyecto_joomla
 				docker stop mysql joomla && docker rm mysql joomla || true
-				docker run --restart=always --name mysql -p 3307:3306 -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql/data -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql
+				docker run --restart=always --name mysql -p 3307:3306 -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql-e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql
 				docker run --rm --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@  -d ahsan0786/proyecto_joomla
+				docker stop mysql joomla && docker rm mysql joomla || true
 				break
             fi         
             sleep 10s
