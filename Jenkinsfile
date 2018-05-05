@@ -59,8 +59,7 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
       } catch(e) {
         error "Staging failed"
       } finally {
-        sh "docker rm -f joomla || true"
-        sh "docker rm -f mysql || true"
+		sh "docker stop mysql joomla && docker rm mysql joomla || true"
         sh "docker ps -aq | xargs docker rm || true"
         sh "docker images -aq -f dangling=true | xargs docker rmi || true"
       }
@@ -77,8 +76,8 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
           if [[ "$SERVICES" -eq 0 ]] && [[ "$SERVICES1" -eq 0 ]] ; then
 	        docker network rm proyecto || true
             docker network create --driver overlay --attachable proyecto
-			docker service create --replicas 3 --network proyecto --name proyecto_mysql -p 3307:3306 ahsan0786/proyecto_mysql
-			docker service create --replicas 3 --network proyecto --name proyecto_joomla -p 8080:80 ahsan0786/proyecto_joomla
+			docker service create --replicas 1 --network proyecto --name proyecto_mysql -p 3307:3306 --mount type=bind,source=/home/ubuntu/docker/containers/mysql,destination=/var/lib/mysql/data -e MYSQL_ROOT_PASSWORD=Ausias123@@ 				ahsan0786/proyecto_mysql
+			docker service create --replicas 3 --network proyecto --name proyecto_joomla -p 8080:80 --mount type=bind,source=/home/ubuntu/docker/containers/joomla,destination=/var/www/html -e JOOMLA_DB_HOST=proyecto_mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@ ahsan0786/proyecto_joomla
 
           else
 			docker service update --image ahsan0786/proyecto_mysql proyecto_mysql
