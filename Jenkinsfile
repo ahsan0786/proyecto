@@ -72,8 +72,6 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
           SERVICES=$(docker service ls --filter name=proyecto_mysql --quiet | wc -l)
 		  SERVICES1=$(docker service ls --filter name=proyecto_joomla --quiet | wc -l)
           if [[ "$SERVICES" -eq 0 ]] && [[ "$SERVICES1" -eq 0 ]] ; then
-			rm -r /home/ubuntu/docker/containers/joomla/
-			rm -r /home/ubuntu/docker/containers/mysql/
 			mkdir /home/ubuntu/docker/containers/mysql/
 			mkdir /home/ubuntu/docker/containers/joomla/
 	        docker network rm proyecto || true
