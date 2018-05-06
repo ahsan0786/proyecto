@@ -59,7 +59,7 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
 		sh "docker stop mysql joomla && docker rm mysql|| true"
         sh "docker ps -aq | xargs docker rm || true"
         sh "docker rmi ahsan0786/proyecto_mysql"
-		sh "docker rmi ahsan0786/proyecto_joomla
+		sh "docker rmi ahsan0786/proyecto_joomla"
       }
     }
   }
