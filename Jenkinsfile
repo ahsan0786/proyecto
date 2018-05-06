@@ -78,7 +78,7 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
 			mkdir /home/ubuntu/docker/containers/joomla/
 	        docker network rm proyecto || true
             docker network create --driver overlay --attachable proyecto
-			docker service create --replicas 1 --network proyecto --name proyecto_mysql -p 3307:3306 --mount type=bind,source=/home/ubuntu/docker/containers/mysql,destination=/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Ausias123@@ ahsan0786/proyecto_mysql
+			docker service create --replicas 1 --network proyecto --name proyecto_mysql -p 3306:3306 --mount type=bind,source=/home/ubuntu/docker/containers/mysql,destination=/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Ausias123@@ ahsan0786/proyecto_mysql
 			docker service create --replicas 3 --network proyecto --name proyecto_joomla -p 8080:80 --mount type=bind,source=/home/ubuntu/docker/containers/joomla,destination=/var/www/html -e JOOMLA_DB_HOST=proyecto_mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@ ahsan0786/proyecto_joomla
 
           else
@@ -95,7 +95,7 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
             STATUS=$(docker service inspect --format '{{ .UpdateStatus.State }}' proyecto_mysql)
 			STATUS1=$(docker service inspect --format '{{ .UpdateStatus.State }}' proyecto_joomla)
             if [[ "$STATUS" != "updating" ]] && [[ "$STATUS1" != "updating" ]]; then
-				docker run --restart=always --name mysql -p 3307:3306 -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql
+				docker run --restart=always --name mysql -p 3308:3306 -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql
 				docker run --rm --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@  -d ahsan0786/proyecto_joomla
 				docker stop mysql joomla
 				docker rm mysql || true
