@@ -26,8 +26,8 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
       }
     }
     stage("Build") {
-        sh "docker build -t proyecto_mysql -f Dockerfile_mysql . "
-		sh "docker build -t proyecto_joomla -f Dockerfile_joomla . "
+#        sh "docker build -t proyecto_mysql -f Dockerfile_mysql . "
+	sh "docker build -t proyecto_joomla -f Dockerfile_joomla . "
     }
     stage("Publish") {
       withDockerRegistry([credentialsId: 'DockerHub']) {
