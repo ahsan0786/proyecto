@@ -11,10 +11,6 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
         sh "docker build -t proyecto_mysql -f Dockerfile_mysql . "
 		sh "docker build -t proyecto_joomla -f Dockerfile_joomla . "
         sh " docker run --restart=always --name mysql -p 3307:3306 -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql "
-		//sh " docker run --restart=always --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@ -d proyecto_joomla "
-        // env variable is used to set the server where go test will connect to run the test
-       // sh "docker run --rm -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Ausias123@@ proyecto_mysql -v --run proyecto_mysql"
-		//sh " docker run --rm --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e /JOOMLA_DB_PASSWORD=Ausias123@@ --run proyecto_joomla "
      sh "docker run --rm --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@  -d ahsan0786/proyecto_joomla "
 		}
       catch(e) {
@@ -26,7 +22,7 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
 	sh "docker pull ahsan0786/proyecto_mysql"
 	sh "docker pull ahsan0786/proyecto_joomla"
         sh "docker rmi ahsan0786/proyecto_mysql"
-		sh "docker rmi ahsan0786/proyecto_joomla"
+	sh "docker rmi ahsan0786/proyecto_joomla"
       }
     }
     stage("Build") {
@@ -35,8 +31,6 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
     }
     stage("Publish") {
       withDockerRegistry([credentialsId: 'DockerHub']) {
-		//sh "proyecto_mysql=$(docker images | grep proyecto_mysql |awk '{print $3}')"
-		//sh "proyecto_joomla=$(docker images | grep proyecto_joomla |awk '{print $3}')"
 		sh "docker tag proyecto_mysql ahsan0786/proyecto_mysql"
 		sh "docker tag proyecto_joomla ahsan0786/proyecto_joomla"
 		sh "docker push ahsan0786/proyecto_mysql"
@@ -51,9 +45,6 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
     stage("Staging") {
       try {
         sh " docker run --restart=always --name mysql -p 3307:3306 -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql "
-		//sh " docker run --restart=always --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_joomla "
-       // sh "docker run --rm -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ ahsan0786/proyecto_mysql -v"
-		//sh "docker run --rm -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@ ahsan0786/proyecto_joomla -v"
 		sh "docker run --rm --name joomla --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@  -d ahsan0786/proyecto_joomla "
       } catch(e) {
         error "Staging failed"
