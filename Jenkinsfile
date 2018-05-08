@@ -14,16 +14,16 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
         sh "docker rm -f joomla || true"
         sh "docker rm -f mysql || true"
         sh "docker ps -aq | xargs docker rm || true"
-        sh "docker rmi ahsan0786/proyecto_mysql"
-	sh "docker rmi ahsan0786/proyecto_joomla"
+	sh "docker build ahsan0786/proyecto_mysql"
+	sh "docker build ahsan0786/proyecto_joomla"
       }
     }
     stage("Publish") {
       withDockerRegistry([credentialsId: 'DockerHub']) {
 		//sh "proyecto_mysql=$(docker images | grep proyecto_mysql |awk '{print $3}')"
 		//sh "proyecto_joomla=$(docker images | grep proyecto_joomla |awk '{print $3}')"
-		sh "docker tag proyecto_mysql ahsan0786/proyecto_mysql"
-		sh "docker tag proyecto_joomla ahsan0786/proyecto_joomla"
+		sh "docker tag ahsan0786/proyecto_mysql ahsan0786/proyecto_mysql"
+		sh "docker tag ahsan0786/proyecto_joomla ahsan0786/proyecto_joomla"
 		sh "docker push ahsan0786/proyecto_mysql"
 		sh "docker push ahsan0786/proyecto_joomla"
       }
