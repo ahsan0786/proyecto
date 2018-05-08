@@ -14,8 +14,6 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
         sh "docker rm -f joomla || true"
         sh "docker rm -f mysql || true"
         sh "docker ps -aq | xargs docker rm || true"
-	sh "docker build ahsan0786/proyecto_mysql"
-	sh "docker build ahsan0786/proyecto_joomla"
       }
     }
     stage("Publish") {
