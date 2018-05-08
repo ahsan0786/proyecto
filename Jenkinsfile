@@ -27,10 +27,10 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
 	sh "docker rmi ahsan0786/proyecto_joomla"
       }
     }
-    stage("Build") {
+//    stage("Build") {
 //        sh "docker build -t proyecto_mysql -f Dockerfile_mysql . "
 //	sh "docker build -t proyecto_joomla -f Dockerfile_joomla . "
-    }
+//    }
     stage("Publish") {
       withDockerRegistry([credentialsId: 'DockerHub']) {
 		//sh "proyecto_mysql=$(docker images | grep proyecto_mysql |awk '{print $3}')"
