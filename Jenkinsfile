@@ -58,16 +58,14 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
 		  SERVICES1=$(docker service ls --filter name=proyecto_joomla --quiet | wc -l)
           if [[ "$SERVICES" -eq 0 ]] && [[ "$SERVICES1" -eq 0 ]] ; then
 			if [[ -f /home/ubuntu/docker/containers/mysql ]]; then
-				sudo chown 999:docker /home/ubuntu/docker/containers/mysql
-				sudo chown 999:docker /home/ubuntu/docker/containers/mysql-config
-				sudo chown www-data:www-data /home/ubuntu/docker/containers/joomla
+				/home/ubuntu
 			else
-				sudo mkdir /home/ubuntu/docker/containers/mysql
-				sudo mkdir /home/ubuntu/docker/containers/mysql-config
-				sudo mkdir /home/ubuntu/docker/containers/joomla
-				sudo chown 999:docker /home/ubuntu/docker/containers/mysql
-				sudo chown 999:docker /home/ubuntu/docker/containers/mysql-config
-				sudo chown www-data:www-data /home/ubuntu/docker/containers/joomla
+				 mkdir /home/ubuntu/docker/containers/mysql
+				 mkdir /home/ubuntu/docker/containers/mysql-config
+				 mkdir /home/ubuntu/docker/containers/joomla
+				 chown 999:docker /home/ubuntu/docker/containers/mysql
+				 chown 999:docker /home/ubuntu/docker/containers/mysql-config
+				 chown www-data:www-data /home/ubuntu/docker/containers/joomla
 			fi
 	        docker network rm proyecto || true
             docker network create --driver overlay --attachable proyecto
@@ -115,16 +113,16 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
 		  SERVICES1=$(docker service ls --filter name=proyecto_joomla --quiet | wc -l)
           if [[ "$SERVICES" -eq 0 ]] && [[ "$SERVICES1" -eq 0 ]] ; then
 			if [[ -f /home/ubuntu/docker/containers/mysql ]]; then
-				sudo chown 999:docker /home/ubuntu/docker/containers/mysql
-				sudo chown 999:docker /home/ubuntu/docker/containers/mysql-config
-				sudo chown www-data:www-data /home/ubuntu/docker/containers/joomla
+				 chown 999:docker /home/ubuntu/docker/containers/mysql
+				 chown 999:docker /home/ubuntu/docker/containers/mysql-config
+				 chown www-data:www-data /home/ubuntu/docker/containers/joomla
 			else
-				sudo mkdir /home/ubuntu/docker/containers/mysql
-				sudo mkdir /home/ubuntu/docker/containers/mysql-config
-				sudo mkdir /home/ubuntu/docker/containers/joomla
-				sudo chown 999:docker /home/ubuntu/docker/containers/mysql
-				sudo chown 999:docker /home/ubuntu/docker/containers/mysql-config
-				sudo chown www-data:www-data /home/ubuntu/docker/containers/joomla
+				 mkdir /home/ubuntu/docker/containers/mysql
+				 mkdir /home/ubuntu/docker/containers/mysql-config
+				 mkdir /home/ubuntu/docker/containers/joomla
+				 chown 999:docker /home/ubuntu/docker/containers/mysql
+				 chown 999:docker /home/ubuntu/docker/containers/mysql-config
+				 chown www-data:www-data /home/ubuntu/docker/containers/joomla
 			fi
 	        docker network rm proyecto || true
             docker network create --driver overlay --attachable proyecto
