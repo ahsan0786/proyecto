@@ -57,9 +57,6 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
           SERVICES=$(docker service ls --filter name=proyecto_mysql --quiet | wc -l)
 		  SERVICES1=$(docker service ls --filter name=proyecto_joomla --quiet | wc -l)
           if [[ "$SERVICES" -eq 0 ]] && [[ "$SERVICES1" -eq 0 ]] ; then
-			 chown 999:docker /home/ubuntu/docker/containers/mysql
-			 chown 999:docker /home/ubuntu/docker/containers/mysql-config
-			 chown www-data:www-data /home/ubuntu/docker/containers/joomla
 	        docker network rm proyecto || true
             docker network create --driver overlay --attachable proyecto
 			docker service create --replicas 1 --network proyecto --name proyecto_mysql -p 3306:3306 --mount type=bind,source=/home/ubuntu/docker/containers/mysql,destination=/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Ausias123@@ ahsan0786/proyecto_mysql
@@ -105,9 +102,6 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
           SERVICES=$(docker service ls --filter name=proyecto_mysql --quiet | wc -l)
 		  SERVICES1=$(docker service ls --filter name=proyecto_joomla --quiet | wc -l)
           if [[ "$SERVICES" -eq 0 ]] && [[ "$SERVICES1" -eq 0 ]] ; then
-			 chown 999:docker /home/ubuntu/docker/containers/mysql
-			 chown 999:docker /home/ubuntu/docker/containers/mysql-config
-			 chown www-data:www-data /home/ubuntu/docker/containers/joomla
 	        docker network rm proyecto || true
             docker network create --driver overlay --attachable proyecto
 			docker service create --replicas 1 --network proyecto --name proyecto_mysql -p 3306:3306 --mount type=bind,source=/home/ubuntu/docker/containers/mysql,destination=/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Ausias123@@ ahsan0786/proyecto_mysql
