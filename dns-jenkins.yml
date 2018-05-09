@@ -5,7 +5,7 @@ services:
     container_name: jenkins
     user: jenkins
     volumes:
-      - /home/ubuntu/docker/containers/jenkins2/jenkins_home:/var/jenkins_home
+      - /home/ubuntu/docker/containers/jenkins/jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
      # - /home/ubuntu/docker/containers/jenkins/timezone:/etc/timezone
      # - /home/ubuntu/docker/containers/jenkins/localtime:/etc/localtime

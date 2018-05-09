@@ -57,11 +57,19 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
           SERVICES=$(docker service ls --filter name=proyecto_mysql --quiet | wc -l)
 		  SERVICES1=$(docker service ls --filter name=proyecto_joomla --quiet | wc -l)
           if [[ "$SERVICES" -eq 0 ]] && [[ "$SERVICES1" -eq 0 ]] ; then
+			if [ -f /home/ubuntu/docker/containers/mysql ]; then
+				sudo chown 999:docker /home/ubuntu/docker/containers/mysql
+				sudo chown 999:docker /home/ubuntu/docker/containers/mysql-config
+				sudo chown www-data:www-data /home/ubuntu/docker/containers/joomla
+			else
+				sudo chown 999:docker /home/ubuntu/docker/containers/mysql
+				sudo chown 999:docker /home/ubuntu/docker/containers/mysql-config
+				sudo chown www-data:www-data /home/ubuntu/docker/containers/joomla
+			fi
 	        docker network rm proyecto || true
             docker network create --driver overlay --attachable proyecto
 			docker service create --replicas 1 --network proyecto --name proyecto_mysql -p 3306:3306 --mount type=bind,source=/home/ubuntu/docker/containers/mysql,destination=/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Ausias123@@ ahsan0786/proyecto_mysql
 			docker service create --replicas 3 --network proyecto --name proyecto_joomla -p 8080:80 --mount type=bind,source=/home/ubuntu/docker/containers/joomla,destination=/var/www/html -e JOOMLA_DB_HOST=proyecto_mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@ ahsan0786/proyecto_joomla
-
           else
 			docker service update --image ahsan0786/proyecto_mysql proyecto_mysql
             docker service update --image ahsan0786/proyecto_joomla proyecto_joomla 
@@ -94,3 +102,58 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
       }
     }
   }
+ 
+  node("docker-prod-slave") {
+    stage("Production") {
+      try {
+        // Create the service if it doesn't exist otherwise just update the image
+        sh '''
+          SERVICES=$(docker service ls --filter name=proyecto_mysql --quiet | wc -l)
+		  SERVICES1=$(docker service ls --filter name=proyecto_joomla --quiet | wc -l)
+          if [[ "$SERVICES" -eq 0 ]] && [[ "$SERVICES1" -eq 0 ]] ; then
+			if [[ -f /home/ubuntu/docker/containers/mysql ]]; then
+				sudo chown 999:docker /home/ubuntu/docker/containers/mysql
+				sudo chown 999:docker /home/ubuntu/docker/containers/mysql-config
+				sudo chown www-data:www-data /home/ubuntu/docker/containers/joomla
+			else
+				sudo chown 999:docker /home/ubuntu/docker/containers/mysql
+				sudo chown 999:docker /home/ubuntu/docker/containers/mysql-config
+				sudo chown www-data:www-data /home/ubuntu/docker/containers/joomla
+			fi
+	        docker network rm proyecto || true
+            docker network create --driver overlay --attachable proyecto
+			docker service create --replicas 1 --network proyecto --name proyecto_mysql -p 3306:3306 --mount type=bind,source=/home/ubuntu/docker/containers/mysql,destination=/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Ausias123@@ ahsan0786/proyecto_mysql
+			docker service create --replicas 3 --network proyecto --name proyecto_joomla -p 8080:80 --mount type=bind,source=/home/ubuntu/docker/containers/joomla,destination=/var/www/html -e JOOMLA_DB_HOST=proyecto_mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@ ahsan0786/proyecto_joomla
+          else
+			docker service update --image ahsan0786/proyecto_mysql proyecto_mysql
+            docker service update --image ahsan0786/proyecto_joomla proyecto_joomla 
+          fi
+          '''
+        // run some final tests in production
+        checkout scm
+        sh '''
+          sleep 60s 
+          for i in `seq 1 20`;
+          do
+            STATUS=$(docker service inspect --format '{{ .UpdateStatus.State }}' proyecto_mysql)
+			STATUS1=$(docker service inspect --format '{{ .UpdateStatus.State }}' proyecto_joomla)
+            if [[ "$STATUS" != "updating" ]] && [[ "$STATUS1" != "updating" ]]; then
+				docker run --restart=always --name mysql -p 3308:3306 -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql
+				docker run --rm --name joomla --link mysql:mysql -p 81:80 -v /home/ubuntu/docker/containers/joomla:/var/www/html -e network_mode=proyecto -e JOOMLA_DB_HOST=mysql -e JOOMLA_DB_USER=root -e JOOMLA_DB_PASSWORD=Ausias123@@  -d ahsan0786/proyecto_joomla
+				docker stop mysql joomla
+				docker rm mysql || true
+				docker rm mysql joomla || true
+				break
+            fi         
+            sleep 10s
+          done
+          
+        '''
+      }catch(e) {
+        sh "docker service update --rollback  proyecto_mysql"
+		sh "docker service update --rollback  proyecto_joomla"
+        error "Service update failed in production"
+      }
+    }
+  }
+
