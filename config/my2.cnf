@@ -1,3 +1,4 @@
+
 # Copyright (c) 2017, Oracle and/or its affiliates. All rights reserved.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -24,11 +25,13 @@ pid-file        = /var/run/mysqld/mysqld.pid
 socket          = /var/run/mysqld/mysqld.sock
 datadir         = /var/lib/mysql
 secure-file-priv= NULL
-server-id=1
+server-id=2
 log-bin=mysql-bin
 log-slave-updates=1
-innodb_flush_log_at_trx_commit = 2
-innodb_flush_method = O_DIRECT
+auto_increment_increment=2
+auto_increment_offset=2
+read-only=1
+slave-skip-errors = 1062
 skip-host-cache
 skip-name-resolve
 # Disabling symbolic-links is recommended to prevent assorted security risks
@@ -36,3 +39,5 @@ symbolic-links=0
 
 # Custom config should go here
 !includedir /etc/mysql/conf.d/
+
+

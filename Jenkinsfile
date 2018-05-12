@@ -36,7 +36,7 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
       } finally {
 		sh "docker stop mysql wordpress && docker rm mysql|| true"
 	        sh "docker ps -aq | xargs docker rm || true"
-        	sh "docker rmi ahsan0786/proyecto_mysql"
+		sh "docker rmi ahsan0786/proyecto_mysql"
 		sh "docker rmi ahsan0786/proyecto_wordpress"
       }
     }
@@ -51,8 +51,8 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
 	 SERVICES1=$(docker service ls --filter name=proyecto_wordpress --quiet | wc -l)
           if [[ "$SERVICES" -eq 0 ]] && [[ "$SERVICES1" -eq 0 ]] ; then
 		docker network rm proyecto || true
-        	docker network create --driver overlay --attachable proyecto
-		docker service create --replicas 1 --network proyecto --name proyecto_mysql -p 3306:3306 --mount type=bind,source=/home/ubuntu/docker/containers/mysql,destination=/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Ausias123@@ mysql:5.7
+		docker network create --driver overlay --attachable proyecto
+		docker service create --replicas 1 --network proyecto --name proyecto_mysql -p 3306:3306 --mount type=bind,source=/home/ubuntu/docker/containers/mysql,destination=/var/lib/mysql --mount type=bind,source=/home/ubuntu/docker/containers/mysql-config/my.cnf,destination=/etc/mysql/my.cnf -e MYSQL_ROOT_PASSWORD=Ausias123@@ mysql:5.7
 		docker service create --replicas 3 --network proyecto --name proyecto_wordpress -p 8080:80 --mount type=bind,source=/home/ubuntu/docker/containers/wordpress,destination=/var/www/html -e WORDPRESS_DB_HOST=proyecto_mysql -e WORDPRESS_DB_USER=root -e WORDPRESS_DB_PASSWORD=Ausias123@@ ahsan0786/proyecto_wordpress
           else
 		docker service update --image ahsan0786/proyecto_mysql proyecto_mysql
@@ -97,7 +97,7 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
           if [[ "$SERVICES" -eq 0 ]] && [[ "$SERVICES1" -eq 0 ]] ; then
 		docker network rm proyecto || true
 		docker network create --driver overlay --attachable proyecto
-		docker service create --replicas 1 --network proyecto --name proyecto_mysql -p 3306:3306 --mount type=bind,source=/home/ubuntu/docker/containers/mysql,destination=/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Ausias123@@ ahsan0786/proyecto_mysql
+		docker service create --replicas 1 --network proyecto --name proyecto_mysql -p 3306:3306 --mount type=bind,source=/home/ubuntu/docker/containers/mysql,destination=/var/lib/mysql  --mount type=bind,source=/home/ubuntu/docker/containers/mysql-config/my2.cnf,destination=/etc/mysql/my.cnf -e MYSQL_ROOT_PASSWORD=Ausias123@@ ahsan0786/proyecto_mysql
 		docker service create --replicas 3 --network proyecto --name proyecto_wordpress -p 8080:80 --mount type=bind,source=/home/ubuntu/docker/containers/wordpress,destination=/var/www/html -e WORDPRESS_DB_HOST=proyecto_mysql -e WORDPRESS_DB_USER=root -e WORDPRESS_DB_PASSWORD=Ausias123@@ ahsan0786/proyecto_wordpress
           else
 		docker service update --image ahsan0786/proyecto_mysql proyecto_mysql
