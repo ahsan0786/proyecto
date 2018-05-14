@@ -1,11 +1,11 @@
 #!/bin/bash
 BASE_PATH=$(dirname $0)
-MASTER_IP=192.168.0.18
-SLAVE_IP=192.168.0.19
+MASTER_IP=192.168.205.142
+SLAVE_IP=192.168.205.143
 MYSQL_SLAVE_PASSWORD=Ausias123@@
 MYSQL_MASTER_PASSWORD=Ausias123@@
 MYSQL_REPLICATION_PASSWORD=Ausias123@@
-MYSQL_REPLICATION_USER=Ausias123@@
+MYSQL_REPLICATION_USER=root
 echo "Waiting for mysql to get up"
 # Give 60 seconds for master and slave to come up
 sleep 3
