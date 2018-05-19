@@ -45,7 +45,7 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
   node("docker-prod") {
     stage("Production") {
       try {
-        // Create the service if it doesn't exist otherwisejust update the image
+        // comprueba si existe el servicio
         sh '''
          SERVICES=$(docker service ls --filter name=proyecto_mysql --quiet | wc -l)
 	 SERVICES1=$(docker service ls --filter name=proyecto_wordpress --quiet | wc -l)
@@ -82,7 +82,21 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
       }catch(e) {
         sh "docker service update --rollback  proyecto_mysql"
 	sh "docker service update --rollback  proyecto_wordpress"
-        error "Service update failed in production"
+        error "Error en el nodo Prod"
       }
     }
   }
+  node("haproxy") {
+    stage("Loadb") {
+      try {
+        // Levanta el container nginx
+	sh "docker stop nginx || true"
+	sh "docker rm ngin || true"
+	sh "docker run --name my-nginx -v /home/ubuntu2/nginx.conf:/etc/nginx/nginx.conf:ro -p 80:80 -d nginx nginx-debug -g 'daemon off;'"
+	checkout scm
+      }catch(e) {
+        error "Error en el nodo LoadB"
+      }
+    }
+  }
+
