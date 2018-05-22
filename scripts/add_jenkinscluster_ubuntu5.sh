@@ -12,7 +12,7 @@ echo "-master http://$ipmaster:8082 -password $password -username $user"|docker 
 docker service create \
     --mode=global \
     --name jenkins-swarm-agent \
-    -e LABELS=proxy \
+    -e LABELS=haproxy \
     --mount "type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock" \
     --mount "type=bind,source=/tmp/,target=/tmp/" \
     --secret source=jenkins-v1,target=jenkins \
