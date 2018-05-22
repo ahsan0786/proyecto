@@ -1,7 +1,7 @@
 env.DOCKERHUB_USERNAME = 'ahsan0786'
   node("docker-test") {
     checkout scm
-    stage("Integration Test") {
+    stage("Testing imagenes") {
       try {
         sh " docker run --restart=always --name mysql -p 3307:3306 -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql "
      sh "docker run --rm --name wordpress --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/wordpress:/var/www/html -e network_mode=proyecto -e WORDPRESS_DB_HOST=mysql -e WORDPRESS_DB_USER=root -e WORDPRESS_DB_PASSWORD=Ausias123@@  -d ahsan0786/proyecto_wordpress"
@@ -14,7 +14,7 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
         sh "docker ps -aq | xargs docker rm || true"
       }
     }
-    stage("Publish") {
+    stage("Publicacion de imagenes") {
       withDockerRegistry([credentialsId: 'DockerHub']) {
 		sh "docker tag ahsan0786/proyecto_mysql ahsan0786/proyecto_mysql"
 		sh "docker tag ahsan0786/proyecto_wordpress ahsan0786/proyecto_wordpress"
@@ -27,7 +27,7 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
   node("docker-stage") {
     checkout scm
 
-    stage("Staging") {
+    stage("Testing contenedores") {
       try {
         sh " docker run --restart=always --name mysql -p 3307:3306 -v /home/ubuntu/docker/containers/mysql:/var/lib/mysql -e network_mode=proyecto -e MYSQL_ROOT_PASSWORD=Ausias123@@ -d ahsan0786/proyecto_mysql "
 	sh "docker run --rm --name wordpress --link mysql:mysql -p 8080:80 -v /home/ubuntu/docker/containers/wordpress:/var/www/html -e network_mode=proyecto -e WORDPRESS_DB_HOST=mysql -e WORDPRESS_DB_USER=root -e WORDPRESS_DB_PASSWORD=Ausias123@@  -d ahsan0786/proyecto_wordpress"
@@ -92,7 +92,7 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
         // Levanta el container nginx
 	sh "docker stop nginx || true"
 	sh "docker rm ngin || true"
-	sh "docker run --name my-nginx -v /home/ubuntu2/nginx.conf:/etc/nginx/nginx.conf:ro -p 80:80 -d nginx nginx-debug -g 'daemon off;'"
+	sh "docker run --name my-nginx -v /home/ubuntu/docker/containers/nginx/nginx.conf:/etc/nginx/nginx.conf:ro -p 80:80 -d nginx nginx-debug -g 'daemon off;'"
 	checkout scm
       }catch(e) {
         error "Error en el nodo LoadB"
