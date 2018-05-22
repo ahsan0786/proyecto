@@ -8,7 +8,7 @@ if [ -d /home/ubuntu/docker/containers/nginx ]; then
         sudo cp -a ${HOME}/proyecto/config/nginx.conf /home/ubuntu/docker/containers/nginx/
 
 else
-        sudo mkdir /home/ubuntu/docker/containers/haproxy
+        sudo mkdir /home/ubuntu/docker/containers/nginx
         sudo cp -a ${HOME}/proyecto/config/nginx.conf /home/ubuntu/docker/containers/nginx/
 
 fi
