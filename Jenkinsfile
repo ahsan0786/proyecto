@@ -91,8 +91,8 @@ env.DOCKERHUB_USERNAME = 'ahsan0786'
       try {
         // Levanta el container nginx
 	sh "docker stop nginx || true"
-	sh "docker rm ngin || true"
-	sh "docker run --name my-nginx -v /home/ubuntu/docker/containers/nginx/nginx.conf:/etc/nginx/nginx.conf:ro -p 80:80 -d nginx nginx-debug -g 'daemon off;'"
+	sh "docker rm nginx || true"
+	sh "docker run --name nginx -v /home/ubuntu/docker/containers/nginx/nginx.conf:/etc/nginx/nginx.conf:ro -p 80:80 -d nginx nginx-debug -g 'daemon off;'"
 	checkout scm
       }catch(e) {
         error "Error en el nodo LoadB"
