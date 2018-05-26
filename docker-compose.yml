@@ -1,30 +1,53 @@
-version: '2'
-
+version: '3'
+networks:
+  traefik-net:
+    external: true
+  proyecto:
 services:
-  joomla:
-    container_name: joomla
-    image: joomla
-    restart: always
-    links:
-      - mysql:mysql
-    ports:
-      - "8080:80"
-    volumes:
-      - /home/ubuntu/docker/containers/joomla:/var/www/html
-    environment:
-      JOOMLA_DB_HOST: mysql
-      JOOMLA_DB_PASSWORD: Ausias123@@
-      JOOMLA_DB_USER: root
-    network_mode: "bridge"
   mysql:
-    container_name: mysql
-    image: mysql:5.6
-    restart: always
-    volumes:
-      - /home/ubuntu/docker/containers/mysql:/var/lib/mysql/data
+    image: ahsan0786/proyecto_mysql
     ports:
-      - "3307:3306"
+      - 3306:3306
+    networks:
+      - proyecto
+    volumes:
+      - /home/ubuntu/docker/containers/mysql:/var/lib/mysql
+      - /home/ubuntu/docker/containers/mysql-config/my.cnf:/etc/mysql/my.cnf
     environment:
-            MYSQL_ROOT_PASSWORD: Ausias123@@
-    network_mode: "bridge"
-
+      MYSQL_ROOT_PASSWORD: Ausias123@@
+  wordpress:
+    image: ahsan0786/proyecto_wordpress
+    networks:
+      - traefik-net
+    volumes:
+      - /home/ubuntu/docker/containers/wordpress/:/var/www/html
+    environment:
+      - WORDPRESS_DB_HOST: mysql
+      - WORDPRESS_DB_USER: root
+      - WORDPRESS_DB_PASSWORD: Ausias123@@
+      - WORDPRESS_DB_NAME: wordpress
+    deploy:
+      labels:
+        - "traefik.port=80"
+        - "traefik.backend=wordpress"
+        - "traefik.frontend.rule=PathPrefix:/"
+      restart_policy:
+        condition: on-failure
+  traefik:
+    image: traefik:1.5
+    command: --web --docker --docker.swarmmode --docker.watch
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - traefik-net
+    ports:
+      - 80:80
+      - 8080:8080
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+ 
+networks:
+  traefik-net:
+    driver: overlay
