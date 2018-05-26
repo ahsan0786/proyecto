@@ -16,6 +16,8 @@ services:
     networks:
       - traefik-net
       - db
+    ports:
+      - 81:80
     volumes:
       - /home/ubuntu/docker/containers/wordpress:/var/www/html
     environment:
@@ -24,13 +26,13 @@ services:
        WORDPRESS_DB_PASSWORD: Ausias123@@
        WORDPRESS_DB_NAME: wordpress
     deploy:
-      replicas: 2
+      replicas: 4
       labels:
         - "traefik.port=80"
-        - "traefik.backend=wordpress"
+        - "traefik.backend=wordpress1.docker4all.com"
+        - "traefik.frontend.rule=Host:wordpress.docker4all.com"
         - "traefik.enable=true"
-        - "traefik.frontend.rule=Host:wordpressahsan.com"
-        - "traefik.docker.network: proyecto_traefik-net"
+        - "traefik.docker.network=proyecto_traefik-net"
       restart_policy:
         condition: on-failure
   traefik:
