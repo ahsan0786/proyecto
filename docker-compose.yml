@@ -29,8 +29,8 @@ services:
       replicas: 4
       labels:
         - "traefik.port=80"
-        - "traefik.backend=192.168.0.18"
-        - "traefik.frontend.rule=Host:wordpress.docker4all.com"
+        - "traefik.backend=192.168.0.18,192.168.0.10"
+        - "traefik.frontend.rule=Host:wordpress1.docker4all.com"
         - "traefik.enable=true"
         - "traefik.docker.network=proyecto_traefik-net"
       restart_policy:
