@@ -1,0 +1,33 @@
+version: '3'
+services:   
+  jenkins:
+    image: istresearch/jenkins:latest
+    container_name: jenkins
+    user: jenkins
+    volumes:
+      - /home/ubuntu/docker/containers/jenkins2/jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+     # - /home/ubuntu/docker/containers/jenkins/timezone:/etc/timezone
+     # - /home/ubuntu/docker/containers/jenkins/localtime:/etc/localtime
+    environment:
+      JENKINS_HOST_HOME: "/data/jenkins"
+    ports:
+      - "8082:8080"
+      - "5000:5000"
+      - "50000:50000"
+    network_mode: "bridge"
+  dnsmasq:
+   container_name: dnsmasq
+   hostname: dnsmasq
+   image: jpillora/dnsmasq
+   restart: always
+   environment:
+     HTTP_USER: ausias
+     HTTP_PASS: Ausias123@@
+   volumes:
+     - /home/ubuntu/docker/containers/dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf
+   ports:
+     - 53:53/udp
+     - 5380:8080
+   network_mode: "bridge"
+

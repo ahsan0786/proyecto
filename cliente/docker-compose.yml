@@ -1,15 +1,11 @@
-version: '3'
-networks:
-  traefik-net:
-    external: true
-  proyecto:
+version: '3.3'
 services:
   mysql:
     image: ahsan0786/proyecto_mysql
     ports:
       - 3306:3306
     networks:
-      - proyecto
+      - db
     volumes:
       - /home/ubuntu/docker/containers/mysql:/var/lib/mysql
       - /home/ubuntu/docker/containers/mysql-config/my.cnf:/etc/mysql/my.cnf
@@ -19,18 +15,24 @@ services:
     image: ahsan0786/proyecto_wordpress
     networks:
       - traefik-net
+      - db
+    ports:
+      - 81:80
     volumes:
-      - /home/ubuntu/docker/containers/wordpress/:/var/www/html
+      - /home/ubuntu/docker/containers/wordpress:/var/www/html
     environment:
-      - WORDPRESS_DB_HOST: mysql
-      - WORDPRESS_DB_USER: root
-      - WORDPRESS_DB_PASSWORD: Ausias123@@
-      - WORDPRESS_DB_NAME: wordpress
+       WORDPRESS_DB_HOST: mysql
+       WORDPRESS_DB_USER: root
+       WORDPRESS_DB_PASSWORD: Ausias123@@
+       WORDPRESS_DB_NAME: wordpress
     deploy:
+      replicas: 4
       labels:
         - "traefik.port=80"
-        - "traefik.backend=wordpress"
-        - "traefik.frontend.rule=PathPrefix:/"
+        - "traefik.backend=192.168.0.18,192.168.0.10"
+        - "traefik.frontend.rule=Host:wordpress1.docker4all.com"
+        - "traefik.enable=true"
+        - "traefik.docker.network=proyecto_traefik-net"
       restart_policy:
         condition: on-failure
   traefik:
@@ -50,4 +52,6 @@ services:
  
 networks:
   traefik-net:
+    driver: overlay
+  db:
     driver: overlay
